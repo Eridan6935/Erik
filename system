@@ -1,0 +1,41 @@
+import os
+import sys
+import platform
+
+os_name = os.name
+platform_system = platform.system()
+platform_release = platform.release()
+python_version = sys.version
+
+def main():
+    menu = (
+        "\n--- Меню диагностики системы ---\n"
+        "1 — Получить имя ОС\n"
+        "2 — Получить тип операционной системы\n"
+        "3 — Получить версию релиза ОС\n"
+        "4 — Получить версию Python\n"
+        "0 — Выйти из программы\n"
+        "Выберите пункт меню: "
+    )
+
+    while True:
+        sys.stdout.write(menu)
+        sys.stdout.flush()
+
+        user_input = sys.stdin.readline().strip()
+
+        if user_input == "0":
+            sys.stdout.write("Завершение работы программы.\n")
+            sys.stdout.flush()
+            break
+        elif user_input in ["1", "2", "3", "4"]:
+            index = int(user_input) - 1
+            sys.stdout.write(f"\n[Результат]: {system_info[index]}")
+            sys.stdout.flush()
+        else:
+            sys.stdout.write("\nНекорректный ввод, попробуйте снова.\n")
+            sys.stdout.flush()
+
+
+if __name__ == "__main__":
+    main()
