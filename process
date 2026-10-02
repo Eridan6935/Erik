@@ -1,0 +1,47 @@
+import os
+import time
+from multiprocessing import Process
+
+# 1. Создаем четыре функции с задержкой (time.sleep) и оповещениями
+def task_one():
+    print(f"[Процесс 1] Запущен. PID: {os.getpid()}")
+    time.sleep(2)
+    print(f"[Процесс 1] Задача выполнена! PID: {os.getpid()}")
+
+def task_two():
+    print(f"[Процесс 2] Запущен. PID: {os.getpid()}")
+    time.sleep(3)
+    print(f"[Процесс 2] Задача выполнена! PID: {os.getpid()}")
+
+def task_three():
+    print(f"[Процесс 3] Запущен. PID: {os.getpid()}")
+    time.sleep(1)
+    print(f"[Процесс 3] Задача выполнена! PID: {os.getpid()}")
+
+def task_four():
+    print(f"[Процесс 4] Запущен. PID: {os.getpid()}")
+    time.sleep(2)
+    print(f"[Процесс 4] Задача выполнена! PID: {os.getpid()}")
+
+if __name__ == '__main__':
+    print(f"--- Главный процесс запущен. PID: {os.getpid()} ---\n")
+
+    # 2. Создаем переменные и помещаем в них объект класса Process
+    p1 = Process(target=task_one)
+    p2 = Process(target=task_two)
+    p3 = Process(target=task_three)
+    p4 = Process(target=task_four)
+
+    # 3. Последовательно запускаем процессы
+    processes = [p1, p2, p3, p4]
+
+    for p in processes:
+        p.start()
+        # Выводим в консоль ID (PID) каждого процесса
+        print(f"--> Создан дочерний процесс с PID: {p.pid}")
+
+    # 4. Ожидаем завершения всех процессов (join)
+    for p in processes:
+        p.join()
+
+    print("\n--- Все процессы успешно завершили работу! ---")
