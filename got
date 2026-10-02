@@ -1,0 +1,87 @@
+Вот готовый скрипт на Python, который создает текстовое описание сущностей музея, автоматически инициализирует локальный Git-репозиторий (если он еще не создан) и делает первый коммит.
+
+1. Скрипт museum_db.py
+Python
+import os
+import subprocess
+
+
+def create_museum_schema():
+    # Содержимое сущностей и связей базы данных музея
+    content = """# База данных музея: Моделирование таблиц и связей
+
+## Список сущностей и внешние ключи (FK)
+
+1. **Buildings (Здания / Корпуса)**
+   - FK: нет (базовая сущность)
+
+2. **Halls (Залы)**
+   - FK: building_id (ссылается на Buildings)
+
+3. **Positions (Должности сотрудников)**
+   - FK: нет (справочник)
+
+4. **Employees (Сотрудники)**
+   - FK: position_id (ссылается на Positions), hall_id (ссылается на Halls)
+
+5. **Categories (Категории экспонатов)**
+   - FK: нет (справочник)
+
+6. **Authors (Авторы / Художники)**
+   - FK: нет (справочник)
+
+7. **Storages (Хранилища / Запасники)**
+   - FK: building_id (ссылается на Buildings)
+
+8. **Exhibits (Экспонаты)**
+   - FK: category_id (ссылается на Categories), author_id (ссылается на Authors), hall_id (ссылается на Halls), storage_location_id (ссылается на Storages)
+
+9. **Exhibitions (Выставки)**
+   - FK: hall_id (ссылается на Halls)
+
+10. **Exhibition_Exhibits (Экспонаты на выставках)**
+    - FK: exhibition_id (ссылается на Exhibitions), exhibit_id (ссылается на Exhibits)
+
+11. **Ticket_Types (Типы билетов)**
+    - FK: нет (справочник)
+
+12. **Tickets (Билеты)**
+    - FK: ticket_type_id (ссылается на Ticket_Types), exhibition_id (ссылается на Exhibitions)
+
+13. **Orders (Заказы / Покупки билетов)**
+    - FK: employee_id (ссылается на Employees)
+
+14. **Order_Items (Позиции заказа)**
+    - FK: order_id (ссылается на Orders), ticket_id (ссылается на Tickets)
+
+15. **Tours (Экскурсии)**
+    - FK: guide_id (ссылается на Employees), hall_id (ссылается на Halls)
+
+16. **Restorations (Реставрации)**
+    - FK: exhibit_id (ссылается на Exhibits), restorer_id (ссылается на Employees)
+"""
+
+    # Сохраняем схему в файл README.md
+    file_name = "README.md"
+    with open(file_name, "w", encoding="utf-8") as f:
+        f.write(content)
+    print(f"[+] Файл {file_name} успешно создан.")
+
+
+def init_git_repo():
+    # Проверяем, инициализирован ли уже git
+    if not os.path.exists(".git"):
+        subprocess.run(["git", "init"])
+        print("[+] Git-репозиторий успешно инициализирован.")
+    else:
+        print("[!] Git-репозиторий уже инициализирован.")
+
+    # Добавляем файлы и делаем коммит
+    subprocess.run(["git", "add", "."])
+    subprocess.run(["git", "commit", "-m", "Add museum DB schema and entities"])
+    print("[+] Изменения сохранены в Git.")
+
+
+if __name__ == "__main__":
+    create_museum_schema()
+    init_git_repo()
